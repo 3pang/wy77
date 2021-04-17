@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<!--日志路径-->
+	<property name="LOG_PATH" value="${APP_HOME}/logs/"/>
+	<!--日志文件名-->
+	<property name="LOG_FILE" value="wy77t1"/>
+	<!--消息输出格式 -->
+	<property name="MSG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -> %msg %n"/>
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${MSG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	
+	<springProfile name="local">
+		<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<encoder>
+				<pattern>${MSG_PATTERN}</pattern>
+				<charset>UTF-8</charset>
+			</encoder>
+			<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+				<!--文件名称命名模式 -->
+				<FileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+				<!--单个文件最大值-->
+				<MaxFileSize>20MB</MaxFileSize>
+				<!--文件保留天数 -->
+				<maxHistory>3</maxHistory>
+				<!--超过此值会删除旧日志 -->
+				<totalSizeCap>1GB</totalSizeCap>
+			</rollingPolicy>
+		</appender>
+		<root level="DEBUG" >
+			<appender-ref ref="FILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+		<logger name="org.hibernate.SQL" level="ERROR" />
+	</springProfile>
+	
+	<springProfile name="production">
+		<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<encoder>
+				<pattern>${MSG_PATTERN}</pattern>
+				<charset>UTF-8</charset>
+			</encoder>
+			<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+				<!--文件名称命名模式 -->
+				<FileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+				<!--单个文件最大值-->
+				<MaxFileSize>20MB</MaxFileSize>
+				<!--文件保留天数 -->
+				<maxHistory>180</maxHistory>
+				<!--超过此值会删除旧日志 -->
+				<totalSizeCap>20GB</totalSizeCap>
+			</rollingPolicy>
+		</appender>
+		<root level="INFO" >
+			<appender-ref ref="CONSOLE" />
+		</root>
+		<logger name="org.hibernate.SQL" level="ERROR" />		
+	</springProfile>
+	
+	<logger name="org.hibernate.SQL" level="ERROR" />
+	<!--rabbit日志级别设置 -->
+	<logger name="org.springframework" level="WARN"/>
+	<logger name="org.springframework.amqp.rabbit.listener.BlockingQueueConsumer" level="WARN"/>
+    <logger name="org.springframework.core.task.SimpleAsyncTaskExecutor" level="WARN"/>
+</configuration>
