@@ -8,9 +8,10 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>wy77</groupId>
 	<artifactId>hibernate-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>hibernate-demo</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -62,7 +63,7 @@
         </dependency>
 
 	</dependencies>
-
+	<!-- 
 	<build>
 		<plugins>
 			<plugin>
@@ -71,5 +72,25 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	 -->
+	<build>
+        <finalName>WY77</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+					<!-- 工程主入口 -->
+					<mainClass>com.lenovo.wy.Wy77t1Application</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
