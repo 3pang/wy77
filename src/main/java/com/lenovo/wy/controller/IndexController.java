@@ -7,6 +7,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,22 +28,19 @@ import com.lenovo.wy.service.impl.IndexServiceImpl;
 import com.lenovo.wy.util.CommonUtil;
 @RequestMapping("/wy77")
 @RestController
+@RefreshScope
 public class IndexController {
 	private static final int String = 0;
 	
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+	@Value("${daniel:false}")
+    private String daniel;
 	@Autowired
 	IndexService indexService;
-
-	@RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
-	public String index(@PathVariable String id,String name ,String age) {
-		Map<String,String> m = new HashMap<String,String>();
-		m.put("id",id);
-		m.put("name",name);
-		m.put("age",age);
-		String s = JSONObject.toJSONString(m);
-		return s;
+	
+	@RequestMapping(value = "/index",method = RequestMethod.GET)
+	public String index() {
+		return "cheng gong diao yong wy77t1";
 	}
 	
 	@RequestMapping(value = "/returnString",produces = "application/json; charset=UTF-8",method = RequestMethod.POST)
@@ -134,8 +133,8 @@ public class IndexController {
 		logger.info("#### info /find recive message: " + msg);
 		Map<String,Object> result = new ModelMap();
 		try {
-			Map<String,Object> reqParam = new ObjectMapper().readValue(msg, Map.class);
-			Operator operator = CommonUtil.transMap2Bean(reqParam,Operator.class);
+//			Map<String,Object> reqParam = new ObjectMapper().readValue(msg, Map.class);
+//			Operator operator = CommonUtil.transMap2Bean(reqParam,Operator.class);
 			List<Operator> operators = indexService.queryUserList();
 			result.put("operatorList", operators);
 			result.put("isSuccess", true);
